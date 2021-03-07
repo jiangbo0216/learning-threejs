@@ -4,7 +4,7 @@
 
 <head>
     <title>Example 01.02 - First Scene</title>
-    <script type="text/javascript" src="../libs/three.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r122/three.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -25,7 +25,7 @@
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
-        // Scene PerspectiveCamera WebGLRenderer
+        // Scene(场景) PerspectiveCamera(照相机) WebGLRenderer(渲染器) AxisHelper(坐标轴)
 
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
@@ -35,7 +35,7 @@
 
         // create a render and set the size
         var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColorHex();
+        // renderer.setClearColorHex();
         renderer.setClearColor(new THREE.Color(0xEEEEEE));
         renderer.setSize(window.innerWidth, window.innerHeight);
 

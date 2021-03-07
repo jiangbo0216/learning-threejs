@@ -3,8 +3,12 @@
 <html>
 
 <head>
-    <title>Example 01.02 - First Scene</title>
-    <script type="text/javascript" src="../libs/three.js"></script>
+    <base href="../">
+    <title>Example 01.03 - Materials and light</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r122/three.js"></script>
+    <!-- <script type="text/javascript" src="../libs/three.js"></script> -->
+    <script type="text/javascript" src="../libs/stats.js"></script>
+    <script type="text/javascript" src="../libs/dat.gui.js"></script>
     <style>
         body {
             /* set margin to 0 and overflow to hidden, to go fullscreen */
@@ -25,8 +29,6 @@
     // once everything is loaded, we run our Three.js stuff.
     function init() {
 
-        // Scene PerspectiveCamera WebGLRenderer
-
         // create a scene, that will hold all our elements such as objects, cameras and lights.
         var scene = new THREE.Scene();
 
@@ -34,21 +36,22 @@
         var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
         // create a render and set the size
-        var renderer = new THREE.WebGLRenderer();
-        renderer.setClearColorHex();
+        var renderer = new THREE.WebGLRenderer({antialias: true});
+
         renderer.setClearColor(new THREE.Color(0xEEEEEE));
+        
+        renderer.setPixelRatio(window.devicePixelRatio);
+
         renderer.setSize(window.innerWidth, window.innerHeight);
+        // renderer.shadowMapEnabled = true;
+        renderer.shadowMap.enabled = true;
 
-        // WebGLRenderer 将会使用电脑显卡来渲染场景
-
-        // show axes in the screen
-        var axes = new THREE.AxisHelper(20); 
-        scene.add(axes);
 
         // create the ground plane
         var planeGeometry = new THREE.PlaneGeometry(60, 20);
-        var planeMaterial = new THREE.MeshBasicMaterial({color: 0xcccccc});
+        var planeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff});
         var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.receiveShadow = true;
 
         // rotate and position the plane
         plane.rotation.x = -0.5 * Math.PI;
@@ -61,8 +64,9 @@
 
         // create a cube
         var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
-        var cubeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000, wireframe: true});
+        var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xff0000});
         var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+        cube.castShadow = true;
 
         // position the cube
         cube.position.x = -4;
@@ -72,15 +76,15 @@
         // add the cube to the scene
         scene.add(cube);
 
-        // create a sphere
         var sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
-        var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x7777ff, wireframe: true});
+        var sphereMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
         var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
         // position the sphere
         sphere.position.x = 20;
         sphere.position.y = 4;
         sphere.position.z = 2;
+        sphere.castShadow = true;
 
         // add the sphere to the scene
         scene.add(sphere);
@@ -89,18 +93,22 @@
         camera.position.x = -30;
         camera.position.y = 40;
         camera.position.z = 30;
-        // camera.position.x = 0;
-        // camera.position.y = 0;
-        // camera.position.z = 100;
         camera.lookAt(scene.position);
+
+        // add spotlight for the shadows
+        var spotLight = new THREE.SpotLight(0xffffff);
+        spotLight.position.set(-40, 60, -10);
+        spotLight.castShadow = true;
+        scene.add(spotLight);
 
         // add the output of the renderer to the html element
         document.getElementById("WebGL-output").appendChild(renderer.domElement);
 
-        // render the scene
+        // call the render function
         renderer.render(scene, camera);
     }
     window.onload = init;
+
 
 </script>
 </body>
